@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-// function useLogger(value){
-//   useEffect( () => {
-//     console.log('Value change: ', value)
-//   }, [value])
-// }
-
-
 function useInputValue(defaultValue = '') {
   const [value, setValue] = useState(defaultValue)
 
@@ -29,11 +22,7 @@ function AddClient(props){
       name: nameInput.value(),
       balance: balanceInput.value()
     })
-  }
-  
-
-  // useLogger(nameInput)
-  
+  }  
   return (
     <div>
         <button type="submit" className="btn btn-success" data-toggle="modal" data-target="#exampleModal">Add client</button>

@@ -12,6 +12,11 @@ code {
     monospace;
 }
 
+
+.navbarHeader-brand{
+  text-align: center;
+    width: 100%;
+}
 .container h1 {
   text-align: center;
 }

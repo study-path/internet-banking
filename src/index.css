@@ -1,0 +1,40 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.container h1 {
+  text-align: center;
+}
+
+.areas {
+  display: flex;
+  justify-content: space-between;
+}
+.bank-area {
+  width: 100%;
+  height: 100%;
+  border: 1px solid black;
+  margin: 5px;
+  padding: 5px;
+}
+
+.client-area {
+  width: 100%;
+  height: 100%;
+  border: 1px solid black;
+  margin: 5px;
+  padding: 5px;
+}
+.btn-success {
+  margin: 5px;
+}

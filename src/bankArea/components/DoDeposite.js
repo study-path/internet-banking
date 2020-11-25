@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useOperationDeposite } from './Deposite/OperationDepositeContext';
+import { useOperationDeposite } from './deposite/OperationDepositeContext';
 
 function DoDeposite() {
   const {show} = useOperationDeposite()

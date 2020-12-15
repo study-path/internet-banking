@@ -10,8 +10,11 @@ export const NavbarHeader = () => (
           <NavLink className="nav-link" to="/" exact>BankArea </NavLink>
         </dt>
         <dt className="nav-item">
-          <NavLink className="nav-link" to="/clientArea">ClientArea</NavLink>
-        </dt>     
+          <NavLink className="nav-link" to="/clients">ClientArea</NavLink>
+        </dt>  
+        <dt className="nav-item">
+          <NavLink className="nav-link" to="/currency-rate">ExchangeRate</NavLink>
+        </dt>         
       </dl>
     </div>
   </nav>

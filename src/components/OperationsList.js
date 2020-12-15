@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const styles={
   h2:{
@@ -8,15 +8,16 @@ const styles={
     width: '150 px',
     display:'flex',
     flexDirection: 'column',
-  },
-  
+  },  
 }
 
 
  function OperationsList (props)  {
+  const [selectedOption, setSelectedOption] = useState(null);
+
    return (
     <>    
-       {       
+      {       
        props.operations.map( (operation)=>{
         const {id, name, balance} = operation;
         return (
@@ -27,8 +28,9 @@ const styles={
             </div>
           </article>
         )
-        })               
-      }         
+      })               
+     }  
+        
     </> 
    )
   

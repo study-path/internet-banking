@@ -40,11 +40,8 @@ const Test1 = () => {
           </li>
         ))}
      </ul> 
-     <hr></hr>
-     n
+   
     </div>
-
-    
   )
 }
 

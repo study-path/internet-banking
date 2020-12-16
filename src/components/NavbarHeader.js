@@ -7,16 +7,22 @@ export const NavbarHeader = () => (
       <h1>Internet Banking</h1>
       <dl className="navbar">
         <dt className="nav-item">
-          <NavLink className="nav-link" to="/" exact>BankArea </NavLink>
+          <NavLink className="nav-link" to="/" exact>Bank</NavLink>
         </dt>
         <dt className="nav-item">
-          <NavLink className="nav-link" to="/clients">ClientArea</NavLink>
-        </dt>  
-        <dt className="nav-item">
-          <NavLink className="nav-link" to="/currency-rate">ExchangeRate</NavLink>
-        </dt>         
+          <NavLink className="nav-link" to="/clients">Clients</NavLink>
+        </dt>        
       </dl>
+    </div>
+    <div>
+    <NavLink className="nav-link" to="/bank/dashboard" exact>Dashboard</NavLink>
+    <NavLink className="nav-link" to="/bank/add-client" exact>Add Client</NavLink>
+    <NavLink className="nav-link" to="/bank/do-deposit" exact>Do Deposite</NavLink> 
+    <NavLink className="nav-link" to="/bank/withdraw/" exact>Withdraw</NavLink>
+
     </div>
   </nav>
   )
+
+  export default NavbarHeader
 

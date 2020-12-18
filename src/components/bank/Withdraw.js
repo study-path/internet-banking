@@ -3,6 +3,7 @@ import Select from 'react-select';
 import styled from 'styled-components';
 
 import { clientsRepository } from '../../firebase/clientsRepository';
+import { operationsRepository } from '../../firebase/operationsRepository';
 
 const Wrapper = styled.div`
   border: 1px solid #f5f4f0;
@@ -24,7 +25,6 @@ const Form = styled.form`
 
 function useInputValue(defaultValue = '') {
   const [value, setValue] = useState(defaultValue); 
-
   return {
     bind: {
       value,
@@ -42,9 +42,12 @@ const Withdraw = (props) => {
   const [selectedClientBalance, setSelectedClientBalance] = useState();
   const [futureBalance, setFutureBalance] = useState();
 
-  useEffect( async () => {    
-    const c = await clientsRepository.getClients();
-    setClients(c);     
+  useEffect( () => {
+    async function fetchData(){
+      const c = await clientsRepository.getClients();
+      setClients(c);   
+    }
+    fetchData();       
   }, []);
 
   const balance = useInputValue('')
@@ -53,10 +56,12 @@ const Withdraw = (props) => {
     var client = await clientsRepository.getClient(selectedClientId);
     client.balance = client.balance - balance.value();
     clientsRepository.updateClient(client);
-    closeModalWindow();
+    var operationId = await operationsRepository.generateOperationId();
+    await operationsRepository.createOperation({id:operationId, date:new Date().toUTCString(), text:`Client ${client.firstName} ${client.lastName} decrease balance `});
+    handleReset();
   }  
 
-  function closeModalWindow() {
+  function handleReset() {
     balance.clear();
   }
 
@@ -68,9 +73,7 @@ const Withdraw = (props) => {
 
   return (
     <div>
-      <button className="btn btn-success" data-toggle="modal" data-target="#addWithdrawDialog">Withdraw</button>     
-      <div className="modal fade" id="addWithdrawDialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog">
+      <div>Withdraw operation</div>
           <div className="modal-content">
             <Wrapper>
               <div>Withdraw money with {selectedClientFullname}</div>
@@ -89,6 +92,7 @@ const Withdraw = (props) => {
                     required
                     type="number"
                     id="balance"
+                    min="0"
                     name="balance"
                     placeholder="balance"
                     {...balance.bind}
@@ -98,15 +102,14 @@ const Withdraw = (props) => {
                   </p>
 
                   <div className="modal-footer">
-                    <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={closeModalWindow}>Exit</button>
-                    <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={makeWithdrawal}>Save</button>
+                    <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={handleReset}>Clear</button>
+                    <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={makeWithdrawal}>Withdraw</button>
                   </div>                  
                 </Form>            
             </Wrapper>
           </div> 
         </div>
-      </div>
-    </div>
+    
   )
 }
 

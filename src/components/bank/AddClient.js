@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { clientsRepository } from '../../firebase/clientsRepository';
+import { operationsRepository } from '../../firebase/operationsRepository';
 
 const Wrapper = styled.div`
   border: 1px solid #f5f4f0;
@@ -23,37 +24,35 @@ const Form = styled.form`
   }
 `;
 
-function useInputValue(defaultValue = null) {
-  const [value, setValue] = useState(defaultValue);
-  return {
-    bind: {
-      value,
-      onChange: event => setValue(event.target.value)
-    },
-    clear: () => setValue(null),
-    value: () => value
-  }  
-}
+
 
 function AddClient(){
-  const firstName = useInputValue('');
-  const lastName = useInputValue('');
-  const balance = useInputValue(0);  
+  
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [balance, setBalance] = useState(0);
 
-  async function addClientClick(){     
+  
+  async function addClientClick(){   
+   
     var client = {
       id: await clientsRepository.generateClientId(),
-      firstName: firstName.value(),
-      lastName: lastName.value(),
-      balance: +balance.value(),
+      firstName: firstName,
+      lastName:lastName,
+      balance: balance
     };   
-    clientsRepository.addClient(client); 
+    await clientsRepository.addClient(client); 
+    alert("Client was added");  
+    var operationId = await operationsRepository.generateOperationId();
+    await operationsRepository.createOperation({id:operationId, date:new Date().toUTCString(), text:`New client ${firstName} ${lastName} was added`});
+    
+    handleReset();
   }  
 
-  function closeForm() {
-    firstName.clear();
-    lastName.clear();
-    balance.clear();    
+   function handleReset() {    
+    setFirstName('');
+    setLastName('');
+    setBalance(0); 
   }
 
   return (
@@ -70,7 +69,7 @@ function AddClient(){
                 id="firstName"
                 name="firstName"
                 placeholder="firstName"
-                {...firstName.bind}
+                onChange={event => setFirstName(event.target.value)}
               />
               <label htmlFor="lastName">Last Name:</label>
               <input
@@ -79,7 +78,7 @@ function AddClient(){
                 id="lastName"
                 name="lastName"
                 placeholder="lastName"
-                {...lastName.bind}
+                onChange={event => setLastName(event.target.value)}
               />    
               <label htmlFor="balance">Balance:</label>
               <input
@@ -88,14 +87,15 @@ function AddClient(){
                 id="balance"
                 name="balance"
                 placeholder="balance"
-                {...balance.bind}                  
+                onChange={event => setBalance(+event.target.value)}                 
               />
               <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={closeForm}>Close</button>
+                <button  className="btn btn-secondary" type="reset" defaultValue="Reset" onClick={handleReset}>Clear</button>
                 <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={addClientClick}>Add new client</button>
               </div>
             </Form>            
         </Wrapper>
+       
       </div>     
   )
 }

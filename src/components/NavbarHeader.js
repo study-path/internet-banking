@@ -7,31 +7,33 @@ const activeClassName = 'nav-item-active'
 const StyledLink = styled(NavLink).attrs({ activeClassName })`
   &.${activeClassName} {
     color: #EF00CF;
-  }
+    border: 1px solid #6d98a5;
+    border-radius: 5px;
+    background-color: #00bcd4;
+    width: 150px;
+  }  
 `;
 
 export const NavbarHeader = () => (
   <nav className="navbar navbar-light bg-light">
     <div className="navbarHeader-brand">
       <h1>Internet Banking</h1>
-      <dl className="navbar">
+      <dl className="navbar">     
         <dt className="nav-item">
-          <StyledLink className="nav-link" to="/" exact>Bank</StyledLink>
+          <StyledLink className="nav-link" to="/bank">Bank</StyledLink>
         </dt>
         <dt className="nav-item">
           <StyledLink className="nav-link" to="/clients">Clients</StyledLink>
-        </dt>        
+        </dt>      
+         <dt className="nav-item">
+          <StyledLink className="nav-link" to="/exchange-rate">Exchange Rate</StyledLink>
+        </dt>       
       </dl>
     </div>
-    <div>
-    <StyledLink className="nav-link" to="/bank/dashboard" exact>Dashboard</StyledLink>
-    <StyledLink className="nav-link" to="/bank/add-client" exact>Add Client</StyledLink>
-    <StyledLink className="nav-link" to="/bank/do-deposit" exact>Do Deposite</StyledLink> 
-    <StyledLink className="nav-link" to="/bank/withdraw/" exact>Withdraw</StyledLink>
-
-    </div>
+    
   </nav>
   )
 
   export default NavbarHeader
 
+  

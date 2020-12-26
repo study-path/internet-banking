@@ -9,9 +9,11 @@ import NavbarHeaderBank from './NavbarHeaderBank';
 const Wrapper = styled.div`
   border: 1px solid #f5f4f0;
   max-width: 500px;
-  padding: 1em; 
-  margin: 0 auto;
-  
+  padding: 1em;
+  margin: 0 auto;  
+`;
+
+const Form = styled.form`
   label,
   input {
     display: block;
@@ -21,10 +23,8 @@ const Wrapper = styled.div`
     width: 100%;
     margin-bottom: 1em;
   }
-  button{
-    margin:0.5rem;
-  } 
 `;
+
 
 const styles = { 
   h3:{
@@ -32,41 +32,41 @@ const styles = {
    }
 }
 
-function useInputValue(defaultValue = '') {
-  const [value, setValue] = useState(defaultValue); 
+function useNumberInputValue(defaultValue = 0) {
+  const [value, setValue] = useState(defaultValue);
+
   return {
     bind: {
       value,
-      onChange: event => setValue(event.target.value)
+      onChange: event => setValue(+event.target.value)
     },
-    clear: () => setValue(''),
+    clear: () => setValue(0),
     value: () => value
-  };
+  }  
 }
-
-const Withdraw = (props) => {
-  const [clients, setClients] = useState([]);
+function Deposit(props){  
+  const [clients, setClients] = useState([]); 
   const [selectedClient, setSelectedClient] = useState();
 
-  useEffect( () => {
-    async function fetchData(){
-      const c = await clientsRepository.getClients();
-      setClients(c);   
-    }
-    fetchData();       
+  useEffect( () => { 
+    async function fetchData(){     
+      const c = await clientsRepository.getClients();   
+      setClients(c);
+    } 
+    fetchData();    
   }, []);
+  
+  const balance =  useNumberInputValue();
 
-  const balance = useInputValue('')
- 
-  async function makeWithdrawal() {
+  async function depositPayment(e){    
     const client = await clientsRepository.getClient(selectedClient.id);
-    client.balance = client.balance - balance.value();
+    client.balance = client.balance +  +balance.value();
     clientsRepository.updateClient(client);
-    
-    const message = `Payment has been withdrawn from the ${client.firstName} ${client.lastName}.`;
+
+    const message = `Payment $${balance.value().toFixed(2)} has been deposited to the ${client.firstName} ${client.lastName}.`;
     alert(message);
 
-    var operationId = await operationsRepository.generateOperationId();
+    const operationId = await operationsRepository.generateOperationId();    
     await operationsRepository.createOperation(
       {
         id: operationId,
@@ -81,54 +81,53 @@ const Withdraw = (props) => {
     setSelectedClient(null);
     balance.clear();
   }
-
-  function onClientChange(selectedClient){
+  
+  function onClientChange(selectedClient){   
     setSelectedClient(selectedClient);
   }
 
   function getBalance() {
     if (selectedClient) {
-      return <span>{selectedClient.balance - balance.value()}</span>
+      return <span>${(selectedClient.balance + +balance.value()).toFixed(2)}</span>;
     }
   }
 
   return (
-    <div>
-      <NavbarHeaderBank />
-      <h3 style={styles.h3}>Withdraw operation</h3>
-          <div >
-            <Wrapper>
-              <label>Clients List</label>
+    <>  
+      <NavbarHeaderBank />    
+      <h3 style={styles.h3}>Deposit operation</h3> 
+      <div>
+        <Wrapper>            
+          <Form>
+            <label>Clients List</label>
               <Select 
-                placeholder="Select client"
                 options={clients}
                 getOptionLabel={client => `${client.firstName} ${client.lastName}` }
                 getOptionValue={client => client.id}
                 onChange = {onClientChange}
                 value={selectedClient}
-                isClearable={true}                    
-              /> 
-              <label htmlFor="balance">Enter the amount to be removed:</label>
-              <input
+              />                           
+            <label htmlFor="balance">Balance:</label>
+            <input
                 required
                 type="number"
                 id="balance"
-                min="0"
                 name="balance"
+                min="0"
                 placeholder="balance"
                 {...balance.bind}
-              />  
+              />
               <p>Balance after operation will be {getBalance()}</p>
-
-              <div>
-                <button className="btn btn-secondary" onClick={handleReset}>Clear</button>
-                <button className="btn btn-primary"  onClick={makeWithdrawal}>Withdraw</button>
-              </div>
-            </Wrapper>            
-          </div> 
-        </div>
-    
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" onClick={handleReset}>Clear</button>
+              <button type="button" className="btn btn-primary" onClick={depositPayment}>Deposit</button>
+            </div>                  
+            </Form >            
+        </Wrapper>
+      </div>
+    </>
   )
 }
 
-export default Withdraw
+export default Deposit
+ 

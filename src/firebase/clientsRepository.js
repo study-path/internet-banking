@@ -16,11 +16,15 @@ export const clientsRepository = {
     return clientRef.set(client);
   },
   generateClientId: async () => {
-    const tableRef = db.ref(`clients`);
-    const dataSnapshot = await tableRef.once("value");
-    let clientId = 0;
-    dataSnapshot.forEach(()=> {clientId++});
-    return clientId + 1;
+    try {
+      const tableRef = db.ref(`clients`);
+      const dataSnapshot = await tableRef.once("value");
+      let clientId = 0;
+      dataSnapshot.forEach(()=> {clientId++});
+      return clientId + 1;      
+    } catch (error) {
+     alert(error); 
+    }
   },
   getClient: async function(clientId){   
     const clientRef = db.ref(`clients/${clientId}`);

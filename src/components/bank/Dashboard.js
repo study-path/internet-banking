@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 
+import NavbarHeaderBank from './NavbarHeaderBank';
 import OperationList from './OperationsList';
 
 const Dashboard = () => {  
 
   return (    
-    <div>    
+    <div>  
+      <NavbarHeaderBank />  
       <OperationList />
     </div>    
   )

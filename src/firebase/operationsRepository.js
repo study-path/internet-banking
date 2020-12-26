@@ -21,14 +21,5 @@ export const operationsRepository = {
     let operationId = 0;
     dataSnapshot.forEach(()=> {operationId++});
     return operationId + 1;
-  },
-  // getClient: async function(clientId){   
-  //   const clientRef = db.ref(`clients/${clientId}`);
-  //   var dataSnapshot = await clientRef.once('value');
-  //   return await dataSnapshot.val();
-  // },
-  // updateClient: async function(client){
-  //   const clientRef = db.ref(`clients/${client.id}`);
-  //   await clientRef.update(client);
-  // }  
+  }  
 };

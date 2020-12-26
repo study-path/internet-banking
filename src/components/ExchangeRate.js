@@ -54,8 +54,11 @@ const ExchangeRate = () => {
     setRows(rows);
   }
   
-  useEffect(async () => {
-    await gettingRate();   
+  useEffect(() => {
+    async function fetchDate() {
+      await gettingRate();   
+    };
+    fetchDate();    
   }, [] );
 
   return (
